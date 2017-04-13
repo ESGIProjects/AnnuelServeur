@@ -5,7 +5,7 @@ var port = process.env.PORT || 8080;
 
 var app = express();
 
-var registrationToken = "dg8AfCG2lPM:APA91bF4nK444FDuREqjBT9PzAnGGSEPcyvIu4Vi6kBHs3JswS8wwot7PswtWnIDANa65KCv3zuhOWsjAHepBD6gom07jZXyLrFhayWtxlMdals2qDJMqaHm7L6OfXEnEQa58o1rPlBx";
+var registrationToken = "f0YDKgJYcBA:APA91bEVNZDtyaAWpkUmZzb9tGVZU-XqlDZrLcbSbnjlpEBk0-YKeyP7hAtc9mFygcO5n9sL0FzNWuCpEzUm4DgXx-Ie2lqfqdvMCWsvCOTRKv-PXKcgIL7Rklwm27nNULIJe9AXZUho";
 
 var payload = {
   notification: {
