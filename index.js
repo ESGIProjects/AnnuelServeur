@@ -5,7 +5,7 @@ var port = process.env.PORT || 8080;
 
 var app = express();
 
-var registrationToken = "f0YDKgJYcBA:APA91bEVNZDtyaAWpkUmZzb9tGVZU-XqlDZrLcbSbnjlpEBk0-YKeyP7hAtc9mFygcO5n9sL0FzNWuCpEzUm4DgXx-Ie2lqfqdvMCWsvCOTRKv-PXKcgIL7Rklwm27nNULIJe9AXZUho";
+var registrationToken = "c5d-BttVGaY:APA91bH1INMy5OWaqpo0OwZi-dJOBVw3e2TuhTRH-gFm_gCYVVgcLG0aipVNjRlynpyi1McxFtVwUrfYRBfvyZ3GeR4Y-Pt4_ehmOl2Tyqure1jfmVZwzGNNr_cjnCK61h4bpdw8z4M";
 
 var payload = {
   notification: {
@@ -35,6 +35,9 @@ app.post('/alert', function(req, res) {
 
 app.get('/', function(req, res) {
     res.send("Hello World !");
+    res.send(process.env.projectId);
+    res.send(process.env.clientEmail);
+    res.send(process.env.privateKey);
 });
 
 app.listen(port, function() {
