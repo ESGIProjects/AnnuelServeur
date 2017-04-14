@@ -34,7 +34,7 @@ app.post('/alert', function(req, res) {
 });
 
 app.get('/', function(req, res) {
-    res.send("Hello World ! " + process.env.projectId + " - " + process.env.clientEmail + " - " + process.env.privateKey );
+    res.send(process.env.privateKey);
 });
 
 app.listen(port, function() {
