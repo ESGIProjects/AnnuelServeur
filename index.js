@@ -6,7 +6,7 @@ var port = process.env.PORT || 8080;
 var app = express();
 
 var registrationToken = "c5d-BttVGaY:APA91bH1INMy5OWaqpo0OwZi-dJOBVw3e2TuhTRH-gFm_gCYVVgcLG0aipVNjRlynpyi1McxFtVwUrfYRBfvyZ3GeR4Y-Pt4_ehmOl2Tyqure1jfmVZwzGNNr_cjnCK61h4bpdw8z4M";
-
+var key = process.env.privateKey;
 var payload = {
   notification: {
     title: "Motion detected !",
@@ -18,7 +18,7 @@ admin.initializeApp({
   credential: admin.credential.cert({
     projectId: process.env.projectId,
     clientEmail: process.env.clientEmail,
-    privateKey: process.env.privateKey
+    privateKey:  key.replace("\\n", "\n")
   }),
   databaseURL: "https://jarvis-773da.firebaseio.com/"
 });
