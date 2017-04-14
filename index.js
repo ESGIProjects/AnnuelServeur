@@ -5,7 +5,7 @@ var port = process.env.PORT || 8080;
 
 var app = express();
 
-var registrationToken = "c5d-BttVGaY:APA91bH1INMy5OWaqpo0OwZi-dJOBVw3e2TuhTRH-gFm_gCYVVgcLG0aipVNjRlynpyi1McxFtVwUrfYRBfvyZ3GeR4Y-Pt4_ehmOl2Tyqure1jfmVZwzGNNr_cjnCK61h4bpdw8z4M";
+var registrationToken = "cyddXI_muVg:APA91bHaaVq6RgytkpGLdrUC-Px73uvU-oqyRdFwoq621_K154NkaRrHKGEkY3wr6AbP4OTBYjVeR_9afvJ7h5Lhyt369-K7vk25Rpa1JfbqVyYRSUqbjeg6KBJ51IpBWsNAfVhUA7Fz";
 var key = process.env.privateKey;
 
 var payload = {
@@ -35,7 +35,7 @@ app.post('/alert', function(req, res) {
 });
 
 app.get('/', function(req, res) {
-    res.send(key.replace(/\\n/g, '\n'));
+    res.send("Test";
 });
 
 app.listen(port, function() {
