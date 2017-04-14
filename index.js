@@ -35,7 +35,7 @@ app.post('/alert', function(req, res) {
 });
 
 app.get('/', function(req, res) {
-    res.send("Test";
+    res.send("Test");
 });
 
 app.listen(port, function() {
