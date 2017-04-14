@@ -28,7 +28,7 @@ app.post('/alert', function(req, res) {
     admin.messaging().sendToDevice(registrationToken,payload)
     .then(function(response){
       console.log("Success ! ", response);
-      process.exit(200);
+      res.status(200);
     })
     .catch(function(error){
       console.log("Error ! ", error);
