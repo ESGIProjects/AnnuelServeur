@@ -34,7 +34,7 @@ app.post('/alert', function(req, res) {
 });
 
 app.get('/', function(req, res) {
-    res.send(process.env.privateKey);
+    res.send(key.replace("\\n", "\n"));
 });
 
 app.listen(port, function() {
