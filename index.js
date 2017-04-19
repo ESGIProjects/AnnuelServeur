@@ -35,8 +35,16 @@ app.post('/alert', function(req, res) {
     })
 });
 
+app.post('m_update', function(req,res){
+
+});
+
+app.post('update', function(req,res){
+
+});
+
 app.get('/', function(req, res) {
-    res.send("Test");
+    res.send(port);
 });
 
 app.listen(port, function() {
