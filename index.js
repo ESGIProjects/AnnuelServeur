@@ -1,5 +1,6 @@
 var express = require("express");
 var admin = require("firebase-admin");
+var pg = require("pg");
 
 var port = process.env.PORT || 8080;
 
@@ -35,11 +36,11 @@ app.post('/alert', function(req, res) {
     })
 });
 
-app.post('m_update', function(req,res){
+app.post('/registerToken', function(req,res)){
 
-});
+}
 
-app.post('update', function(req,res){
+app.post('/updatePassword', function(req,res){
 
 });
 
