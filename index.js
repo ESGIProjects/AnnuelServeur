@@ -59,7 +59,7 @@ app.post('/alert', function(req, res) {
             admin
             .messaging()
             .sendToDevice(deviceToken.token, payload)
-            .then(function(res) {
+            .then(function(response) {
                 console.log("Success ! ", res);
                 res.status(200).send("Success");
             })
