@@ -38,7 +38,6 @@ var DeviceToken = mongoose.model('DeviceToken', new mongoose.Schema({
     token: String
 }));
 
-process.env.MONGODB_URI = 'mongodb://heroku_30zt34kx:d70kbje1r1apa2reje1tjrtvtt@ds115131.mlab.com:15131/heroku_30zt34kx';
 mongoose.connect(process.env.MONGODB_URI, function(error) {
     if (error) console.error(error);
     else console.log('mongo connected');
