@@ -17,8 +17,9 @@
   },
   "homepage": "https://github.com/ESGIProjects/AnnuelServeur#readme",
   "dependencies": {
-    "pg": "6.x",
+    "body-parser": "^1.17.1",
     "express": "^4.15.2",
-    "firebase-admin": "^4.2.1"
+    "firebase-admin": "^4.2.1",
+    "pg": "6.x"
   }
 }
