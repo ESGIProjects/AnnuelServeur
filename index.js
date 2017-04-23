@@ -11,6 +11,10 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true})) ;
 
+// Moteur de template
+app.set('view engine', 'twig');
+app.use(express.static(__dirname + '/resources'));
+
 // Clé Firebase
 var key = process.env.privateKey;
 
@@ -60,7 +64,7 @@ app.post('/alert', function(req, res) {
             .messaging()
             .sendToDevice(deviceToken.token, payload)
             .then(function(response) {
-                console.log("Success ! ", res);
+                console.log("Success ! ", response);
                 res.status(200).send("Success");
             })
             .catch(function(error){
@@ -110,7 +114,10 @@ app.post('/updatePassword', function(req,res){
 });
 
 app.get('/', function(req, res) {
-    res.send(port);
+    res.render('index.twig', {
+        title: "Jarvis",
+        port: port
+    });
 });
 
 // Lancement de l'application
