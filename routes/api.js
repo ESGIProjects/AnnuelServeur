@@ -15,6 +15,14 @@ module.exports = function(DeviceToken, admin) {
                 console.error(error);
                 res.status(500);
             } else {
+                // Notification payload
+                var payload = {
+                    notification: {
+                        title: "Motion detected !",
+                        body: "Somebody is in your house !"
+                    }
+                };
+
                 // Envoyer la notification
                 admin
                 .messaging()

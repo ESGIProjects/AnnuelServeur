@@ -15,17 +15,6 @@ app.use(bodyParser.urlencoded({ extended: true})) ;
 app.set('view engine', 'twig');
 app.use(express.static(__dirname + '/resources'));
 
-// Clé Firebase
-var key = process.env.privateKey;
-
-// Notification payload
-var payload = {
-    notification: {
-        title: "Motion detected !",
-        body: "Somebody is in your house !"
-    }
-};
-
 // Mise en place Firebase
 admin.initializeApp({
     credential: admin.credential.cert({
