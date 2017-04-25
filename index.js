@@ -1,13 +1,13 @@
 // Dépendances
 var express = require("express");
 var admin = require("firebase-admin");
+var bodyParser = require('body-parser');
 
 // Nécessaire pour laisser Heroku contrôler le port
 var port = process.env.PORT || 8080;
 var app = express();
 
 // Middleware pour parser les requêtes POST
-var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true})) ;
 
@@ -31,7 +31,7 @@ admin.initializeApp({
     credential: admin.credential.cert({
         projectId: process.env.projectId,
         clientEmail: process.env.clientEmail,
-        privateKey:  key.replace(/\\n/g, '\n')
+        privateKey:  process.env.privateKey.replace(/\\n/g, '\n')
     }),
     databaseURL: "https://jarvis-773da.firebaseio.com/"
 });
@@ -47,56 +47,8 @@ mongoose.connect(process.env.MONGODB_URI, function(error) {
     else console.log('mongo connected');
 });
 
-// Route envoyant une simple notification d'alerte
-app.post('/alert', function(req, res) {
-
-    // Récupérer le dernier token
-    DeviceToken
-    .findOne()
-    .sort({'_id': -1})
-    .exec(function(error, deviceToken) {
-        if (error) {
-            console.error(error);
-            res.status(500);
-        } else {
-            // Envoyer la notification
-            admin
-            .messaging()
-            .sendToDevice(deviceToken.token, payload)
-            .then(function(response) {
-                console.log("Success ! ", response);
-                res.status(200).send("Success");
-            })
-            .catch(function(error){
-                console.error("Error ! ", error);
-            });
-        }
-    });
-});
-
-// Route permettant d'enregistrer un token dans la base de données
-app.post('/registerToken', function(req,res) {
-
-    // Vérification du paramètre
-    if (req.body.deviceToken === undefined) {
-        res.status(400);
-    }
-
-    // Création de l'objet à stocker
-    var token = new DeviceToken({
-        "token": req.body.deviceToken
-    });
-
-    // Stockage de l'objet
-    token.save(function(error) {
-        if (error) {
-            console.error(error);
-            res.status(500);
-        } else {
-            res.status(201).json(token);
-        }
-    });
-});
+app.use('/', require('./routes/web')(port));
+app.use('/api/', require('./routes/api')(DeviceToken, admin));
 
 // Debug affichage bdd token
 app.get('/debug/displayAllTokens', function(req, res) {
@@ -109,16 +61,6 @@ app.get('/debug/displayAllTokens', function(req, res) {
     });
 });
 
-app.post('/updatePassword', function(req,res){
-
-});
-
-app.get('/', function(req, res) {
-    res.render('index.twig', {
-        title: "Jarvis",
-        port: port
-    });
-});
 
 // Lancement de l'application
 app.listen(port, function() {
