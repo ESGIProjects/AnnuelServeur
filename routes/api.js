@@ -32,7 +32,7 @@ module.exports = function(DeviceToken, admin) {
                     res.status(200).send("Success");
                 })
                 .catch(function(error){
-                    console.error("Error ! ", error);
+                    console.error("Error !", error);
                 });
             }
         });

@@ -1,7 +1,7 @@
 {
-  "name": "annuelserver",
+  "name": "jarvis",
   "version": "1.0.0",
-  "description": "",
+  "description": "Jarvis server (school project)",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -21,6 +21,7 @@
     "express": "^4.15.2",
     "firebase-admin": "^4.2.1",
     "mongoose": "^4.9.5",
+    "request": "^2.81.0",
     "twig": "^1.10.4"
   }
 }
