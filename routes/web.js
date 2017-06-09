@@ -19,12 +19,9 @@ module.exports = function(port) {
     router.post('/updatePassword', function(req, res) {
 
         if (req.body.password == req.body.confirmPassword) {
-            request
-                .post('/api/updatePassword')
-                .on('response', function(response) {
-                    console.log(response);
+            request.post('http://localhost:8080/api/updatePassword', function(error, response, body) {
+                    console.log(response.statusCode);
             });
-
             res.send("Password okay!");
         } else {
             res.render('update.twig', {

@@ -63,7 +63,7 @@ module.exports = function(DeviceToken, admin) {
     });
 
     router.post('/updatePassword', function(req,res){
-
+        res.status(200).json({message:'password_okay_message'});
     });
 
     return router;
