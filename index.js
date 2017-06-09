@@ -31,13 +31,18 @@ var DeviceToken = mongoose.model('DeviceToken', new mongoose.Schema({
     token: String
 }));
 
+var SavedDate = mongoose.model('SavedDate', new mongoose.Schema({
+    date: Date,
+    reason: String
+}));
+
 mongoose.connect(process.env.MONGODB_URI, function(error) {
     if (error) console.error(error);
     else console.log('mongo connected');
 });
 
 app.use('/', require('./routes/web')(port));
-app.use('/api/', require('./routes/api')(DeviceToken, admin));
+app.use('/api/', require('./routes/api')(DeviceToken, SavedDate, admin));
 
 // Debug affichage bdd token
 app.get('/debug/displayAllTokens', function(req, res) {

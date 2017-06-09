@@ -1,7 +1,7 @@
-module.exports = function(DeviceToken, admin) {
-
+module.exports = function(DeviceToken, SavedDate, admin) {
     var express = require('express');
     var router = express.Router();
+    var request = require('request');
 
     // Route envoyant une simple notification d'alerte
     router.post('/alert', function(req, res) {
@@ -17,9 +17,9 @@ module.exports = function(DeviceToken, admin) {
             } else {
                 // Notification payload
                 var payload = {
-                  data: {
-                        title: "Motion detected !",
-                        body: "Somebody is in your house !"
+                    data: {
+                        title: "Un mouvement a été détecté",
+                        body: "Il se peut que quelqu'un soit à l'intérieur de votre domicile."
                     }
                 };
 
@@ -28,11 +28,23 @@ module.exports = function(DeviceToken, admin) {
                 .messaging()
                 .sendToDevice(deviceToken.token, payload)
                 .then(function(response) {
-                    console.log("Success ! ", response);
-                    res.status(200).send("Success");
+                    console.log("Notification Success", response);
+                    res.status(200).send("Notification Succes");
                 })
                 .catch(function(error){
-                    console.error("Error !", error);
+                    console.error("Notification Error !", error);
+                });
+
+                // Enregister la date
+                var date = new SavedDate({
+                    'date': Date.now(),
+                    'reason': 'motion'
+                });
+
+                date.save(function(error) {
+                    if (error) {
+                        console.error(error);
+                    }
                 });
             }
         });
@@ -62,10 +74,99 @@ module.exports = function(DeviceToken, admin) {
         });
     });
 
-    router.post('/updatePassword', function(req,res){
+    router.post('/updatePassword', function(req,res) {
+
+
         res.status(200).json({message:'password_okay_message'});
     });
 
-    return router;
+    // Route permettant au smartphone de vérifier le statut de l'alarme
+    router.post('/alamStatus', function(req, res) {
+        request.post('ARDUINO URL', function(error, response, body) {
+            if (error) {
+                console.error(error);
+                res.status(500);
+            } else {
+                res.status(200).json(body);
+            }
+        });
+    });
 
+    // Route permettant au smartphone de désactiver l'alarme
+    router.post('/disableAlarm', function(req, res) {
+        // Envoi de la demande à l'Arduino
+
+        request.post('ARDUINO URL', req.body, function(error, response, body) {
+            if (error) {
+                console.error(error);
+                res.status(500);
+            } else {
+                // Enregister la date
+                var date = new SavedDate({
+                    'date': Date.now(),
+                    'reason': 'disable'
+                });
+
+                date.save(function(error) {
+                    if (error) {
+                        console.error(error);
+                    }
+                });
+
+                res.status(200).json(body);
+            }
+        });
+    });
+
+    // Route permettant au smartphone d'activer l'alarme
+    router.post('/enableAlarm', function(req, res) {
+        // Envoi de la demande à l'Arduino
+
+        request.post('ARDUINO URL', req.body, function(error, response, body) {
+            if (error) {
+                console.error(error);
+                res.status(500);
+            } else {
+
+                // Enregister la date
+                var date = new SavedDate({
+                    'date': Date.now(),
+                    'reason': 'enable'
+                });
+
+                date.save(function(error) {
+                    if (error) {
+                        console.error(error);
+                    }
+                });
+
+                res.status(200).json(body);
+            }
+        });
+    });
+
+    router.post('/saveDate', function(req, res) {
+
+        if (req.body.reason === undefined) {
+            res.status(400);
+        }
+
+        var reason = req.body.reason
+
+        var date = new SavedDate({
+            'date': Date.now(),
+            'reason': reason
+        });
+
+        date.save(function(error) {
+            if (error) {
+                console.error(error);
+                res.status(301);
+            } else {
+                res.status(201);
+            }
+        });
+    });
+
+    return router;
 };
