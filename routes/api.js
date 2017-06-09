@@ -17,7 +17,7 @@ module.exports = function(DeviceToken, admin) {
             } else {
                 // Notification payload
                 var payload = {
-                    notification: {
+                  data: {
                         title: "Motion detected !",
                         body: "Somebody is in your house !"
                     }
