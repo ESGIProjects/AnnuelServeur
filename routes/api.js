@@ -17,7 +17,7 @@ module.exports = function(DeviceToken, SavedDate, admin) {
             } else {
                 // Notification payload
                 var payload = {
-                    data: {
+                    alert: {
                         title: "Un mouvement a été détecté",
                         body: "Il se peut que quelqu'un soit à l'intérieur de votre domicile."
                     }
