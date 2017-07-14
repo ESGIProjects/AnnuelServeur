@@ -6,9 +6,9 @@ module.exports = function(DeviceToken, SavedDate, admin) {
     // Route envoyant une simple notification d'alerte
     router.post('/alert', function(req, res) {
 
-        // Récupérer le dernier token
+        // Récupérer le dernier token iOS
         DeviceToken
-        .findOne()
+        .findOne({os: "ios"})
         .sort({'_id': -1})
         .exec(function(error, deviceToken) {
             if (error) {
@@ -34,18 +34,49 @@ module.exports = function(DeviceToken, SavedDate, admin) {
                 .catch(function(error){
                     console.error("Notification Error !", error);
                 });
+            }
+        });
 
-                // Enregister la date
-                var date = new SavedDate({
-                    'date': Date.now(),
-                    'reason': 'motion'
-                });
-
-                date.save(function(error) {
-                    if (error) {
-                        console.error(error);
+        // Récupérer le dernier token Android
+        DeviceToken
+        .findOne({os: "android"})
+        .sort({'_id': -1})
+        .exec(function(error, deviceToken) {
+            if (error) {
+                console.error(error);
+                res.status(500);
+            } else {
+                // Notification payload
+                var payload = {
+                    data: {
+                        title: "Un mouvement a été détecté",
+                        body: "Il se peut que quelqu'un soit à l'intérieur de votre domicile."
                     }
+                };
+
+                // Envoyer la notification
+                admin
+                .messaging()
+                .sendToDevice(deviceToken.token, payload)
+                .then(function(response) {
+                    console.log("Notification Success to " + deviceToken.token, response);
+                    res.status(200).send("Notification Succes");
+                })
+                .catch(function(error){
+                    console.error("Notification Error !", error);
                 });
+            }
+        });
+
+        // Enregister la date
+        var date = new SavedDate({
+            'date': Date.now(),
+            'reason': 'motion'
+        });
+
+        date.save(function(error) {
+            if (error) {
+                console.error(error);
             }
         });
     });
@@ -53,14 +84,19 @@ module.exports = function(DeviceToken, SavedDate, admin) {
     // Route permettant d'enregistrer un token dans la base de données
     router.post('/registerToken', function(req,res) {
 
-        // Vérification du paramètre
+        // Vérification des paramètres
         if (req.body.deviceToken === undefined) {
+            res.status(400);
+        }
+
+        if (req.body.os === undefined) {
             res.status(400);
         }
 
         // Création de l'objet à stocker
         var token = new DeviceToken({
-            "token": req.body.deviceToken
+            "token": req.body.deviceToken,
+            "os": req.body.os
         });
 
         // Stockage de l'objet

@@ -28,7 +28,8 @@ admin.initializeApp({
 // Mise en place mongoose
 var mongoose = require('mongoose');
 var DeviceToken = mongoose.model('DeviceToken', new mongoose.Schema({
-    token: String
+    token: String,
+    os: String
 }));
 
 var SavedDate = mongoose.model('SavedDate', new mongoose.Schema({
