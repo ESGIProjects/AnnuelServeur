@@ -28,7 +28,7 @@ module.exports = function(DeviceToken, SavedDate, admin) {
                 .messaging()
                 .sendToDevice(deviceToken.token, payload)
                 .then(function(response) {
-                    console.log("Notification Success", response);
+                    console.log("Notification Success to " + deviceToken.Token, response);
                     res.status(200).send("Notification Succes");
                 })
                 .catch(function(error){
