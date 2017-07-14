@@ -8,9 +8,8 @@ module.exports = function(DeviceToken, SavedDate, admin) {
 
         // Récupérer le dernier token
         DeviceToken
-        .find()
+        .findOne()
         .sort({'_id': -1})
-        .limit(2)
         .exec(function(error, deviceToken) {
             if (error) {
                 console.error(error);
