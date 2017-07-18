@@ -1,112 +1,125 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Jarvis Dashboard</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <style type="text/css">
-            body {
-                padding: 10px;
-            }
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jarvis Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style type="text/css">
+    body {
+        padding: 10px;
+    }
 
-            #motionChart {
-                margin: auto;
-                margin-top: 50px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="page-header">
-            <h1>Panneau d'administration Jarvis <small>Port utilisé : {{ port }}</small></h1>
-        </div>
+    #motionChart {
+        margin: auto;
+        margin-top: 50px;
+    }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1>Panneau d'administration Jarvis <small>Port utilisé : {{ port }}</small></h1>
+    </div>
 
-        <ul class="nav nav-pills nav-justified" role="tablist">
-            <li role="presentation" {% if displayMode == 1 %} class="active" {% endif %}>
-                <a href="/1">Dernières 24h
+    <ul class="nav nav-pills nav-justified" role="tablist">
+        <li role="presentation" {% if displayMode == 1 %} class="active" {% endif %}>
+            <a href="/1">Dernières 24h
                 {% if displayMode == 1 %} <span class="badge">{{ alarmsCount }}</span>{% endif %}</a>
 
             </li>
             <li role="presentation" {% if displayMode == 2 %} class="active" {% endif %}>
                 <a href="/2">7 derniers jours
-                {% if displayMode == 2 %} <span class="badge">{{ alarmsCount }}</span>{% endif %}</a>
-            </li>
-        </ul>
+                    {% if displayMode == 2 %} <span class="badge">{{ alarmsCount }}</span>{% endif %}</a>
+                </li>
+            </ul>
 
 
-        <canvas id="motionChart" width="1050" height="500"></canvas>
+            <canvas id="motionChart" width="1050" height="500"></canvas>
 
-        <div class="page-header">
-            <h1>Liste des tokens enregistrés <small>Utilisés pour Firebase</small></h1>
-        </div>
+            <div class="page-header">
+                <h1>Liste des tokens enregistrés <small>Utilisés pour Firebase</small></h1>
+            </div>
 
-        <button type="button" class="btn btn-primary btn-lg" onclick="post();">Envoyer une notification de test</button>
+            <button type="button" class="btn btn-primary btn-lg" onclick="post();">Envoyer une notification de test</button>
 
-    <ul class="list-group">
-        {% for token in tokens %}
-        <li class="list-group-item">
-            <span class="badge">{% if token.os == "ios" %}iOS{% elseif token.os == "android" %}Android{% endif %}</span>
-            {{ token.token }}
-        </li>
-        {% endfor %}
-    </ul>
+            <ul class="list-group">
+                {% for token in tokens %}
+                <li class="list-group-item">
+                    <span class="badge">{% if token.os == "ios" %}iOS{% elseif token.os == "android" %}Android{% endif %}</span>
+                    {{ token.token }}
+                </li>
+                {% endfor %}
+            </ul>
 
-    </body>
-    <script src="Chart.js"></script>
-    <script>
-    <!--
-    // Chart configuration
-    var alarmData = {{ alarms|json_encode|raw }};
-    var keys = [], values = [];
+        </body>
+        <script src="Chart.js"></script>
+        <script>
+        <!--
+        // Chart configuration
+        var alarmData = {{ alarms|json_encode|raw }};
+        var keys = [], values = [];
 
-    for (var key in alarmData) {
-        if(alarmData.hasOwnProperty(key)) {
-            keys.push(key);
-            values.push(alarmData[key]);
-        }
-    }
-
-    var ctx = document.getElementById('motionChart').getContext("2d");
-    var data = {
-        labels: keys,
-        datasets: [
-            {
-                label: "Détections",
-                backgroundColor: 'rgba(51, 122, 183, 0.4)',
-                borderColor: 'rgba(51, 122, 183, 1)',
-                borderWidth: 1,
-                data: values
+        for (var key in alarmData) {
+            if(alarmData.hasOwnProperty(key)) {
+                keys.push(key);
+                values.push(alarmData[key]);
             }
-        ]
-    };
+        }
 
-    var options = {
-        animation: {
-            duration: 3000
-        },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
+        var ctx = document.getElementById('motionChart').getContext("2d");
+        var data = {
+            labels: keys,
+            datasets: [
+                {
+                    label: "Détections",
+                    backgroundColor: 'rgba(51, 122, 183, 0.4)',
+                    borderColor: 'rgba(51, 122, 183, 1)',
+                    borderWidth: 1,
+                    data: values
                 }
-            }]
-        },
-        responsive: false,
-        maintainAspectRatio: false
-    };
+            ]
+        };
 
-    var myBarChart = Chart.Bar(ctx, {
-        data: data,
-        options: options
-    });
+        var options = {
+            animation: {
+                duration: 3000
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+            responsive: false,
+            maintainAspectRatio: false
+        };
 
-    // Post notification function
-    function post() {
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/api/alert');
-        xhr.send(null);
+        var myBarChart = Chart.Bar(ctx, {
+            data: data,
+            options: options
+        });
+
+
+
+        // Post notification function
+        function post() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/alert');
+            xhr.send(null);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        location.reload(true);
+                    }
+                } else {
+                    console.log('XHR Error ' + xhr.status); // An error occurred during the request.
+                }
+            }
+        };
     }
     -->
     </script>
-</html>
+    </html>
