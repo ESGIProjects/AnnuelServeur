@@ -41,7 +41,7 @@
             <h1>Liste des tokens enregistrés <small>Utilisés pour Firebase</small></h1>
         </div>
 
-        <button onclick="post();">Notif test</button>
+        <button type="button" class="btn btn-primary btn-lg" onclick="post();">>Envoyer une notification de test</button>
 
     <ul class="list-group">
         {% for token in tokens %}
@@ -100,8 +100,6 @@
         data: data,
         options: options
     });
-
-
 
     // Post notification function
     function post() {
