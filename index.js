@@ -42,7 +42,7 @@ mongoose.connect(process.env.MONGODB_URI, function(error) {
     else console.log('mongo connected');
 });
 
-app.use('/', require('./routes/web')(port, SavedDate));
+app.use('/', require('./routes/web')(DeviceToken, SavedDate, port));
 app.use('/api/', require('./routes/api')(DeviceToken, SavedDate, admin));
 
 // Debug affichage bdd token

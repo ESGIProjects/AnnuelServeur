@@ -4,24 +4,100 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>{{ title }}</title>
+        <title>Jarvis Dashboard</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <style type="text/css">
+            body {
+                padding: 10px;
+            }
+
+            #motionChart {
+                margin: auto;
+                margin-top: 50px;
+            }
+        </style>
     </head>
     <body>
         <div class="page-header">
             <h1>Panneau d'administration Jarvis <small>Port utilisé : {{ port }}</small></h1>
         </div>
 
-        <ul class="nav nav-pills">
-            <li role="presentation" {% if displayMode == 1 %} class="active" {% endif %}><a href="#">Dernières 24h</a></li>
-            <li role="presentation"  {% if displayMode == 2 %} class="active" {% endif %}><a href="#">7 derniers jours</a></li>
+        <ul class="nav nav-pills nav-justified" role="tablist">
+            <li role="presentation" {% if displayMode == 1 %} class="active" {% endif %}>
+                <a href="/1">Dernières 24h
+                {% if displayMode == 1 %} <span class="badge">{{ alarmsCount }}</span>{% endif %}</a>
+
+            </li>
+            <li role="presentation" {% if displayMode == 2 %} class="active" {% endif %}>
+                <a href="/2">7 derniers jours
+                {% if displayMode == 2 %} <span class="badge">{{ alarmsCount }}</span>{% endif %}</a>
+            </li>
         </ul>
 
 
-        {% for key, value in alarms %}
-            Day : {{ key }}<br />
-            Alarms : {{ value }}<br /> <br/>
+        <canvas id="motionChart" width="1050" height="500"></canvas>
+
+        <div class="page-header">
+            <h1>Liste des tokens enregistrés <small>Utilisés pour Firebase</small></h1>
+        </div>
+
+    <ul class="list-group">
+        {% for token in tokens %}
+        <li class="list-group-item">
+            <span class="badge">{% if token.os == "ios" %}iOS{% elseif token.os == "android" %}Android{% endif %}</span>
+            {{ token.token }}
+        </li>
         {% endfor %}
+    </ul>
 
     </body>
+    <script src="Chart.js"></script>
+    <script>
+    <!--
+
+    var alarmData = {{ alarms|json_encode|raw }};
+    var keys = [], values = [];
+
+    for (var key in alarmData) {
+        if(alarmData.hasOwnProperty(key)) {
+            keys.push(key);
+            values.push(alarmData[key]);
+        }
+    }
+
+    var ctx = document.getElementById('motionChart').getContext("2d");
+    var data = {
+        labels: keys,
+        datasets: [
+            {
+                label: "Détections",
+                backgroundColor: 'rgba(51, 122, 183, 0.4)',
+                borderColor: 'rgba(51, 122, 183, 1)',
+                borderWidth: 1,
+                data: values
+            }
+        ]
+    };
+
+    var options = {
+        animation: {
+            duration: 3000
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        },
+        responsive: false,
+        maintainAspectRatio: false
+    };
+
+    var myBarChart = Chart.Bar(ctx, {
+        data: data,
+        options: options
+    });
+    -->
+    </script>
 </html>

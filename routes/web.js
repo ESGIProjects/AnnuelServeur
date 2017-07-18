@@ -1,14 +1,7 @@
-module.exports = function(port, SavedDate) {
+module.exports = function(DeviceToken, SavedDate, port) {
     var express = require('express');
     var router = express.Router();
     var request = require('request');
-
-    router.get('/test', function(req, res) {
-        res.render('test.twig', {
-            title: "Jarvis",
-            port: port
-        });
-    });
 
     router.get('/:displayMode*?', function(req, res) {
 
@@ -30,15 +23,12 @@ module.exports = function(port, SavedDate) {
             startDate.setDate(today.getDate() - 7);
         }
 
-        console.log(today, ', ', startDate);
-
         SavedDate
         .find({date: {'$gte': startDate, '$lt': today}})
         .exec(function(error, dbDates) {
 
             // 1. Faire tableau des jours
             var alarms = {};
-
 
             // 2. Faire tableau du nb d'alarmes par jr
             for (var i = 0; i < dbDates.length; i++) {
@@ -51,16 +41,31 @@ module.exports = function(port, SavedDate) {
                 }
             }
 
-            console.log(alarms);
+            // 3. Récupération de tous les tokens
+            DeviceToken
+            .find()
+            .sort({'_id': -1})
+            .exec(function(error, dbTokens) {
 
-            res.render('index.twig', {
-                title: "Jarvis",
-                port: port,
-                displayMode: 1,
-                alarms: alarms
+                // 4. Tableau de tokens exploitable par twig
+                var tokens = [];
+
+                for (var i = 0; i < dbTokens.length; i++) {
+                    tokens.push({
+                        token: dbTokens[i].token,
+                        os: dbTokens[i].os
+                    });
+                }
+
+                res.render('index.twig', {
+                    port: port,
+                    displayMode: displayMode,
+                    alarms: alarms,
+                    alarmsCount: dbDates.length,
+                    tokens: tokens
+                });
             });
         });
-
     });
 
     return router;
