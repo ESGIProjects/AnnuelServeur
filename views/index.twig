@@ -41,6 +41,8 @@
             <h1>Liste des tokens enregistrés <small>Utilisés pour Firebase</small></h1>
         </div>
 
+        <button onclick="post();">Notif test</button>
+
     <ul class="list-group">
         {% for token in tokens %}
         <li class="list-group-item">
@@ -54,7 +56,7 @@
     <script src="Chart.js"></script>
     <script>
     <!--
-
+    // Chart configuration
     var alarmData = {{ alarms|json_encode|raw }};
     var keys = [], values = [];
 
@@ -98,6 +100,15 @@
         data: data,
         options: options
     });
+
+
+
+    // Post notification function
+    function post() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/alert');
+        xhr.send(null);
+    }
     -->
     </script>
 </html>
