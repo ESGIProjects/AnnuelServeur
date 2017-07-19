@@ -1,8 +1,7 @@
 module.exports = function(DeviceToken, SavedDate, port) {
     var express = require('express');
     var router = express.Router();
-    var request = require('request');
-
+    
     router.get('/:displayMode*?', function(req, res) {
 
         var displayMode;

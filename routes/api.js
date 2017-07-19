@@ -28,11 +28,11 @@ module.exports = function(DeviceToken, SavedDate, admin) {
                 .messaging()
                 .sendToDevice(deviceToken.token, payload)
                 .then(function(response) {
-                    console.log("Notification Success to " + deviceToken.token, response);
+                    console.log("iOS Notification Success to " + deviceToken.token, response);
                     res.status(200).send("Notification Succes");
                 })
                 .catch(function(error){
-                    console.error("Notification Error !", error);
+                    console.error("iOS Notification Error !", error);
                 });
             }
         });
@@ -59,11 +59,10 @@ module.exports = function(DeviceToken, SavedDate, admin) {
                 .messaging()
                 .sendToDevice(deviceToken.token, payload)
                 .then(function(response) {
-                    console.log("Notification Success to " + deviceToken.token, response);
-                    res.status(200).send("Notification Succes");
+                    console.log("Android Notification Success to " + deviceToken.token, response);
                 })
                 .catch(function(error){
-                    console.error("Notification Error !", error);
+                    console.error("Android Notification Error !", error);
                 });
             }
         });
@@ -106,100 +105,6 @@ module.exports = function(DeviceToken, SavedDate, admin) {
                 res.status(500);
             } else {
                 res.status(201).json(token);
-            }
-        });
-    });
-
-    router.post('/updatePassword', function(req,res) {
-
-
-        res.status(200).json({message:'password_okay_message'});
-    });
-
-    // Route permettant au smartphone de vérifier le statut de l'alarme
-    router.post('/alamStatus', function(req, res) {
-        request.post('ARDUINO URL', function(error, response, body) {
-            if (error) {
-                console.error(error);
-                res.status(500);
-            } else {
-                res.status(200).json(body);
-            }
-        });
-    });
-
-    // Route permettant au smartphone de désactiver l'alarme
-    router.post('/disableAlarm', function(req, res) {
-        // Envoi de la demande à l'Arduino
-
-        request.post('ARDUINO URL', req.body, function(error, response, body) {
-            if (error) {
-                console.error(error);
-                res.status(500);
-            } else {
-                // Enregister la date
-                var date = new SavedDate({
-                    'date': Date.now(),
-                    'reason': 'disable'
-                });
-
-                date.save(function(error) {
-                    if (error) {
-                        console.error(error);
-                    }
-                });
-
-                res.status(200).json(body);
-            }
-        });
-    });
-
-    // Route permettant au smartphone d'activer l'alarme
-    router.post('/enableAlarm', function(req, res) {
-        // Envoi de la demande à l'Arduino
-
-        request.post('ARDUINO URL', req.body, function(error, response, body) {
-            if (error) {
-                console.error(error);
-                res.status(500);
-            } else {
-
-                // Enregister la date
-                var date = new SavedDate({
-                    'date': Date.now(),
-                    'reason': 'enable'
-                });
-
-                date.save(function(error) {
-                    if (error) {
-                        console.error(error);
-                    }
-                });
-
-                res.status(200).json(body);
-            }
-        });
-    });
-
-    router.post('/saveDate', function(req, res) {
-
-        if (req.body.reason === undefined) {
-            res.status(400);
-        }
-
-        var reason = req.body.reason
-
-        var date = new SavedDate({
-            'date': Date.now(),
-            'reason': reason
-        });
-
-        date.save(function(error) {
-            if (error) {
-                console.error(error);
-                res.status(301);
-            } else {
-                res.status(201);
             }
         });
     });

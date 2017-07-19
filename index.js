@@ -45,18 +45,6 @@ mongoose.connect(process.env.MONGODB_URI, function(error) {
 app.use('/', require('./routes/web')(DeviceToken, SavedDate, port));
 app.use('/api/', require('./routes/api')(DeviceToken, SavedDate, admin));
 
-// Debug affichage bdd token
-app.get('/debug/displayAllTokens', function(req, res) {
-    DeviceToken.find(function(error, tokens) {
-        if (error) {
-            console.error(error);
-            res.status(500);
-        }
-        res.status(200).json(tokens);
-    });
-});
-
-
 // Lancement de l'application
 app.listen(port, function() {
     console.log('Running on port ' + port);
